@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Language Translation</title>
+</head>
+<body>
+    <h1>Live Language Translation</h1>
+    <textarea id="inputText" rows="5" cols="40" placeholder="Enter text to translate"></textarea>
+    <br>
+    <select id="targetLanguage">
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <!-- Add more language options here -->
+    </select>
+    <br>
+    <button onclick="translateText()">Translate</button>
+    <h2>Translated Text:</h2>
+    <p id="translatedText"></p>
+
+    <script>
+        function translateText() {
+            const apiKey = 'YOUR_GOOGLE_API_KEY';
+            const inputText = document.getElementById('inputText').value;
+            const targetLanguage = document.getElementById('targetLanguage').value;
+            const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
+            const data = {
+                q: inputText,
+                target: targetLanguage,
+            };
+
+            fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                const translatedText = data.data.translations[0].translatedText;
+                document.getElementById('translatedText').textContent = translatedText;
+            })
+            .catch(error => {
+                console.error('Translation error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
